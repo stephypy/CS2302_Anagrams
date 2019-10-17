@@ -49,9 +49,10 @@ def count_anagrams(english_words):
 def counting_anagrams(english_words, word, li, prefix=""):
     if len(word) <= 1:
         str = prefix + word
-
-        if str in english_words.root:
+        # print(str)
+        if str in english_words.__str__():
             li.append(prefix + word)
+            print(prefix + word)
     else:
         for i in range(len(word)):
             cur = word[i: i + 1]
@@ -67,10 +68,10 @@ def counting_anagrams(english_words, word, li, prefix=""):
 # Link above provides a visualization for insertion (has to be manually inserted though)
 def avl_option():
     english_words = avl.AVL()
-    file = 'example.txt'
+    file = 'tops.txt'
     with open(file) as f:
         for curr_line in f:
-            curr_line = curr_line.replace('\n', '')
+            # curr_line = curr_line.replace('\n', '')
             english_words.insert(curr_line)
     print('1. Count Anagrams')
     print('2. Greatest Num of Anagrams')

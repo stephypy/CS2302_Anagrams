@@ -4,13 +4,6 @@ class Node:
         self.left = None
         self.right = None
 
-    def __iter__(self):
-        if self.left:
-            yield from self.left
-        yield self
-        if self.right:
-            yield from self.right
-
     def node_height(self, node):
         if node is None:
             return 0
@@ -28,20 +21,48 @@ class AVL:
         self.root = None
         self.height = 0
 
+    def __iter__(self):
+        return self.__next__(self.root)
+
+    def __next__(self, node):
+        if node is None:
+            return
+        if node.left:
+            for item in self.__next__(node.left):
+                yield item
+        yield node.key
+        if node.right:
+            for item in self.__next__(node.right):
+                yield item
+
+    def contains(self, val):
+        return self._contains(self.root, val)
+
+    def _contains(self, node, val):
+        if node is None:
+            return False
+
+        if node.key == val:
+            return True
+        if val > node.key:
+            return self._contains(node.right, val)
+        else:
+            return self._contains(node.left, val)
+
     def update_height(self):
         self.height = self.root.node_height(self.root)
 
     def insert(self, key):
-        self.root = self.inserting(self.root, key)
+        self.root = self._insert(self.root, key)
         self.update_height()
 
-    def inserting(self, root, key):
+    def _insert(self, root, key):
         if root is None:
             return Node(key)
-        elif key < root.key:
-            root.left = self.inserting(root.left, key)
+        elif key <= root.key:
+            root.left = self._insert(root.left, key)
         else:
-            root.right = self.inserting(root.right, key)
+            root.right = self._insert(root.right, key)
 
         self.update_height()
         balance_factor = self.get_balance(root)
@@ -59,30 +80,21 @@ class AVL:
                 return self.left_rotate(root)
         return root
 
-    def left_rotate(self, z):
-        y = z.right
-        T1 = y.left
-        y.left = z
-        z.right = T1
-        return y
+    def left_rotate(self, curr):
+        new_curr = curr.right
+        new_curr_child = new_curr.left
+        new_curr.left = curr
+        curr.right = new_curr_child
+        return new_curr
 
-    def right_rotate(self, z):
-        y = z.left
-        T2 = y.right
-        y.right = z
-        z.left = T2
-        return y
+    def right_rotate(self, curr):
+        new_curr = curr.left
+        new_curr_child = new_curr.right
+        new_curr.right = curr
+        curr.left = new_curr_child
+        return new_curr
 
     def get_balance(self, root):
         if root is None:
             return 0
         return root.node_height(root.left) - root.node_height(root.right)
-
-    def inorder(self, root):
-        if root is None:
-            return
-        if root.left:
-            self.inorder(root.left)
-        print(root.key)
-        if root.right:
-            self.inorder(root.right)

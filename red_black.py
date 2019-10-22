@@ -94,7 +94,7 @@ class RBTree:
             grandparent.color = 'red'
             self.rebalance(grandparent)
             return
-        if grandparent.left is not None:
+        if grandparent.left is not None and parent is not None and parent.right is not None:
             if node.key is parent.right.key and parent.key is grandparent.left.key:
                 self.left_rotate(parent)
                 node = parent
@@ -140,8 +140,9 @@ class RBTree:
         return True
 
     def replace_child(self, parent, curr_child, new_child):
-        if parent.left.key is curr_child.key:
-            return self.set_child(parent, 'left', new_child)
-        elif parent.right.key is curr_child.key:
-            return self.set_child(parent, 'right', new_child)
+        if parent.left is not None or curr_child is not None or parent.right is not None:
+            if parent.left.key is curr_child.key:
+                return self.set_child(parent, 'left', new_child)
+            elif parent.right.key is curr_child.key:
+                return self.set_child(parent, 'right', new_child)
         return False

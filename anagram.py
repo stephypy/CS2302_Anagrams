@@ -1,3 +1,12 @@
+# CS 2302 Data Structures: MW 1:30PM - 2:50PM
+# Author: Stephanie Galvan
+# Assignment: Lab 3- Option B Anagrams
+# Instructor: Diego Aguirre
+# TA: Gerardo Barraza
+# Date of last modification: October 21, 2019
+# Purpose: Given a file, generate an AVL or Red-Black tree and find the valid anagrams of a word
+
+
 import avl
 import red_black
 
@@ -7,8 +16,6 @@ def print_anagrams(english_words, word, prefix=""):
         str = prefix + word
 
         if str in english_words:
-            print(prefix + word)
-        else:
             print(prefix + word)
     else:
         for i in range(len(word)):
@@ -39,6 +46,7 @@ def count_anagrams(english_words):
     word = input()
     word = word.replace("\n", "")
     print('Total anagrams of ', word, ': ', _count_anagrams(english_words, word, []))
+    print_anagrams(english_words, word)
 
 
 def _count_anagrams(english_words, word, li, prefix=""):
@@ -59,7 +67,7 @@ def _count_anagrams(english_words, word, li, prefix=""):
 
 def get_avl_tree():
     english_words = avl.AVL()
-    file = 'tops.txt'
+    file = 'random.txt'
     with open(file) as f:
         for curr_line in f:
             curr_line = curr_line.replace('\n', '')
@@ -69,7 +77,7 @@ def get_avl_tree():
 
 def get_rb_tree():
     english_words = red_black.RBTree()
-    file = 'tops.txt'
+    file = 'random.txt'
     with open(file) as f:
         for curr_line in f:
             curr_line = curr_line.replace('\n', '')
